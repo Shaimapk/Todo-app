@@ -5,7 +5,10 @@ import { FaEdit } from "react-icons/fa";
 
 function Todo() {
     const [todo, setTodo] = useState("");
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(()=>{
+        const storedTodos = localStorage.getItem("todos");
+        return storedTodos ? JSON.parse(storedTodos):[]
+    });
     const [editId,setEditId]=useState(null);
 
     const handleForm = (e) => {
@@ -29,6 +32,12 @@ function Todo() {
     useEffect(() => {
         inputRef.current.focus();
     },[editId]);
+        
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
+
+    
 
     const onDelete=(id)=>{
         setTodos(todos.filter((item)=>item.id !==id));
